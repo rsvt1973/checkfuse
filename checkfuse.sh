@@ -16,11 +16,11 @@ if [ -z "$KSYMS" ]; then
 fi
 
 # Прбуем загрузить модуль, если он не в ядре
-/sbin/modprobe fuse
+/sbin/modprobe fuse >> /dev/null 2>&1
 
-FUSE_DEV_INIT=`cat $KSYMS | grep fuse_dev_cleanup`
+FUSE_DEV_CLEANUP=`cat $KSYMS | grep fuse_dev_cleanup`
 
-if [ -n "$KSYMS" ]; then
+if [ -n "$FUSE_DEV_CLEANUP" ]; then
     echo "FUSE Exist!"
     exit 0
 fi

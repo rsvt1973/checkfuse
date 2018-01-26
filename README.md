@@ -1,1 +1,1 @@
-# checkfuse
+Check fuse in kernel
