@@ -20,21 +20,27 @@ fi
 
 FUSE_DEV_CLEANUP=`cat $KSYMS | grep fuse_dev_cleanup`
 
+# Прбуем найти модуль
+KERNEL_RELEASE=`uname -r`
+MODULEFUSE=`find /lib/modules/$KERNEL_RELEASE/ -name fuse.ko*`
+if [ -z "$MODULEFUSE" ]; then
+    MODULEFUSE=`find /lib/modules/$KERNEL_RELEASE/ -name fuse.o*`
+fi
+
+# Если modprobe не сработал, пробуем insmod
+# при условии что модуль найден
+LOADEDMODULE=`lsmod | grep fuse`
+if [ -z "$LOADEDMODULE" ]; then
+    if [ -n "$MODULEFUSE" ]; then
+        /sbin/insmod $MODULEFUSE >> /dev/null 2>&1
+    fi
+fi
+
 if [ -n "$FUSE_DEV_CLEANUP" ]; then
     echo "FUSE Exist!"
     exit 0
 fi
 
-# Прбуем найти модуль
-KERNEL_RELEASE=`uname -r`
-MODULEFUSE=`find /lib/modules/$KERNEL_RELEASE/ -name fuse.ko*`
-if [ -n "$MODULEFUSE" ]; then
-    echo "Module $MODULEFUSE found. More research is needed!"
-    exit 0
-fi
-
-# Прбуем найти модуль
-MODULEFUSE=`find /lib/modules/$KERNEL_RELEASE/ -name fuse.o*`
 if [ -n "$MODULEFUSE" ]; then
     echo "Module $MODULEFUSE found. More research is needed!"
     exit 0
