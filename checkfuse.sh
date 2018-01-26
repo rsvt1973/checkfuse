@@ -26,14 +26,15 @@ if [ -n "$FUSE_DEV_CLEANUP" ]; then
 fi
 
 # Прбуем найти модуль
-MODULEFUSE=`find /lib/modules/`uname -r`/ -name fuse.ko*`
+KERNEL_RELEASE=`uname -r`
+MODULEFUSE=`find /lib/modules/$KERNEL_RELEASE/ -name fuse.ko*`
 if [ -n "$MODULEFUSE" ]; then
     echo "Module $MODULEFUSE found. More research is needed!"
     exit 0
 fi
 
 # Прбуем найти модуль
-MODULEFUSE=`find /lib/modules/`uname -r`/ -name fuse.o*`
+MODULEFUSE=`find /lib/modules/$KERNEL_RELEASE/ -name fuse.o*`
 if [ -n "$MODULEFUSE" ]; then
     echo "Module $MODULEFUSE found. More research is needed!"
     exit 0
