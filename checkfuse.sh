@@ -18,8 +18,6 @@ fi
 # Прбуем загрузить модуль, если он не в ядре
 /sbin/modprobe fuse >> /dev/null 2>&1
 
-FUSE_DEV_CLEANUP=`cat $KSYMS | grep fuse_dev_cleanup`
-
 # Прбуем найти модуль
 KERNEL_RELEASE=`uname -r`
 MODULEFUSE=`find /lib/modules/$KERNEL_RELEASE/ -name fuse.ko*`
@@ -36,6 +34,7 @@ if [ -z "$LOADEDMODULE" ]; then
     fi
 fi
 
+FUSE_DEV_CLEANUP=`cat $KSYMS | grep fuse_dev_cleanup`
 if [ -n "$FUSE_DEV_CLEANUP" ]; then
     echo "FUSE Exist!"
     exit 0
